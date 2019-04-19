@@ -1,0 +1,7 @@
+---
+- name: mariadbのインストール
+  yum: name={{item}} state=present
+  with_items:
+    - mariadb
+    - mariadb-server
+    - mariadb-devel

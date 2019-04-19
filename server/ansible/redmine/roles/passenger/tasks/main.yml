@@ -1,0 +1,28 @@
+---
+- name: Passengerのインストール
+  gem: name=passenger state=present executable=.rbenv/shims/gem user_install=False
+  notify: rbenv rehash
+
+- name: Passengerのpathを取得
+  shell: cd; bash -lc "passenger-config --root"
+  register: passenger_root
+
+- name: Passengerのmoduleを取得
+  stat: path={{ passenger_root.stdout }}/buildout/apache2/mod_passenger.so
+  register: module
+
+- name: Passengerのmoduleをインストール
+  shell: cd; bash -lc "passenger-install-apache2-module --auto --languages=ruby"
+  when: module.stat.exists != True
+
+- name: Rubyのpathを取得
+  shell: cd; bash -lc "rbenv which ruby"
+  register: ruby_dir
+
+- name: Passengerの設定ファイル設置
+  template: src=passenger.conf.j2 dest=/etc/httpd/conf.d/passenger.conf
+  register: passenger_conf
+
+- name: Apacheのリスタート
+  service: name=httpd state=restarted
+  when: passenger_conf.changed

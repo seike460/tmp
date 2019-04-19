@@ -1,0 +1,44 @@
+---
+- name: パッケージのインストール
+  yum: name={{item}} state=present
+  with_items:
+    - git
+    - gcc
+    - gcc-c++
+    - openssl-devel
+    - make
+    - dstat
+    - curl-devel
+    - httpd-devel
+    - apr-devel
+    - apr-util-devel
+    - sqlite-devel
+    - zip
+    - libXext
+    - libXrender
+    - fontconfig
+    - libfontconfig.so.1
+    - patch
+    - readline
+    - readline-devel
+    - zlib
+    - zlib-devel
+    - libyaml-devel
+    - libffi-devel
+    - openssl-devel
+    - bzip2
+    - autoconf
+    - automake
+    - libtool
+    - bison
+    - vim
+    - svn
+    - ImageMagick
+    - ImageMagick-devel
+    - ipa-pgothic-fonts
+    - openssl-devel
+    - readline-devel
+    - zlib-devel
+    - curl-devel
+    - libyaml-devel
+    - libffi-devel

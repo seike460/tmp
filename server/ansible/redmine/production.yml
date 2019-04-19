@@ -1,0 +1,14 @@
+---
+- hosts: production
+  sudo: true
+  vars:
+    - username: root
+    - appname: redmine
+    - app_root: /var/www/redmine
+  roles:
+    - common
+    - ruby
+    - redmine
+    - mysql
+    - apache
+    - passenger

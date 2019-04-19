@@ -1,0 +1,3 @@
+- name: rbenv rehash
+  shell: bash -lc "rbenv rehash"
+  become: no

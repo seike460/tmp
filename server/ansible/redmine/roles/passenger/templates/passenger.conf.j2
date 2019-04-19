@@ -1,0 +1,15 @@
+LoadModule passenger_module {{ passenger_root.stdout }}/buildout/apache2/mod_passenger.so
+<IfModule mod_passenger.c>
+  PassengerRoot {{ passenger_root.stdout }}
+  PassengerDefaultRuby {{ ruby_dir.stdout }}
+  PassengerFriendlyErrorPages Off
+</IfModule>
+
+<VirtualHost *:80>
+  DocumentRoot {{ app_root }}/public
+  RailsEnv production
+  <Directory {{ app_root }}/public>
+    AllowOverride all
+    Options -MultiViews
+  </Directory>
+</VirtualHost>

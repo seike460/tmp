@@ -1,0 +1,24 @@
+---
+- name: /var/wwwフォルダの作成
+  file: path=/var/www/ state=directory mode=0775
+
+- name: wget redmine
+  shell: cd /var/www && wget http://www.redmine.org/releases/redmine-4.0.3.tar.gz
+
+- name:mv redmine
+  shell: mv redmine-4.0.3 redmine
+
+- name: install redmine
+  shell: source ~/.bash_profile; cd /var/www/redmine; bundle install --without development test --path vendor/bundle;
+  args:
+    executable: /bin/bash
+
+- name: generate_secret_token
+  shell: source ~/.bash_profile; cd /var/www/redmine; bundle exec rake generate_secret_token;
+  args:
+    executable: /bin/bash
+
+- name: redmine redmine
+  shell: source ~/.bash_profile; cd /var/www/redmine; RAILS_ENV=production REDMINE_LANG=ja bundle exec rake redmine:load_default_data
+  args:
+    executable: /bin/bash

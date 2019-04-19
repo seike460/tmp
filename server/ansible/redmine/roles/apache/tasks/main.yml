@@ -1,0 +1,25 @@
+---
+- name: apacheのインストール
+  yum: name=httpd state=present
+
+- name: mod_sslのインストール
+  yum: name=mod_ssl state=present
+
+- name: httpd.confの修正
+  lineinfile: dest=/etc/httpd/conf/httpd.conf regexp='{{ item.regexp }}' line='{{ item.line }}'
+  with_items:
+    - regexp: "^ServerTokens OS"
+      line: "ServerTokens Prod" # httpレスポンスヘッダでosやサーバー情報を隠す
+    - regexp: "^ServerSignature On"
+      line: "ServerSignature Off" # error pageでosやサーバー情報を隠す
+    - regexp: "^Timeout 60"
+      line: "Timeout 300" # タイムアウト時間を変更
+
+- name: apacheの起動
+  service: name=httpd state=started enabled=yes
+
+- name: /var/wwwフォルダの作成
+  file: path=/var/www state=directory owner=root group=root mode=0775
+
+- name: applicationフォルダの作成
+  file: path=/var/www/{{ appname }} state=directory owner={{ username }} group={{ username }} mode=0775
